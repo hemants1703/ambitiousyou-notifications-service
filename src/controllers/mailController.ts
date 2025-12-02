@@ -7,6 +7,7 @@ import {
   sendEmailVerificationEmailValidator,
   sendPasswordResetEmailValidator,
   sendPasswordResetUpdateEmailValidator,
+  sendPasswordUpdateConfirmationEmailValidator,
   sendWelcomeEmailValidator,
 } from "../validators/mailValidators";
 import z from "zod";
@@ -63,6 +64,9 @@ export const sendWelcomeEmail = async (req: Request, res: Response): Promise<Res
 };
 
 export const sendEmailVerificationEmail = async (req: Request, res: Response): Promise<Response> => {
+  console.log("sendEmailVerificationEmail");
+  console.log(req.body);
+
   const validatedData = sendEmailVerificationEmailValidator.safeParse(req.body);
 
   if (!validatedData.success) {
@@ -92,7 +96,7 @@ export const sendEmailVerificationEmail = async (req: Request, res: Response): P
   }
 };
 
-export const sendPasswordResetEmail = async (req: Request, res: Response): Promise<Response> => {
+export const sendPasswordResetLinkEmail = async (req: Request, res: Response): Promise<Response> => {
   const validatedData = sendPasswordResetEmailValidator.safeParse(req.body);
 
   if (!validatedData.success) {
@@ -104,10 +108,10 @@ export const sendPasswordResetEmail = async (req: Request, res: Response): Promi
 
   const { to, username, passwordResetLink } = validatedData.data;
 
-  let html = fs.readFileSync(path.join(__dirname, "../", "static/password-reset-verification.html"), "utf8");
+  let html = fs.readFileSync(path.join(__dirname, "../", "static/password-reset.html"), "utf8");
 
   html = html.replace("{{USERNAME}}", username);
-  html = html.replace("{{PASSWORD_RESET_LINK}}", passwordResetLink);
+  html = html.replace("{{RESET_LINK}}", passwordResetLink);
 
   const subject = "Reset Your Password for AmbitiousYou!";
   const text = `You're receiving this email because you requested a password reset for your AmbitiousYou account. Please click the button below to reset your password: ${passwordResetLink}`;
@@ -122,7 +126,7 @@ export const sendPasswordResetEmail = async (req: Request, res: Response): Promi
   }
 };
 
-export const sendPasswordResetUpdateEmail = async (req: Request, res: Response): Promise<Response> => {
+export const sendPasswordResetConfirmationEmail = async (req: Request, res: Response): Promise<Response> => {
   const validatedData = sendPasswordResetUpdateEmailValidator.safeParse(req.body);
 
   if (!validatedData.success) {
@@ -139,6 +143,37 @@ export const sendPasswordResetUpdateEmail = async (req: Request, res: Response):
 
   const subject = "Password Reset Successfully!";
   const text = `Your password has been reset successfully. Please click the button below to login: ${process.env.FRONTEND_URL}/login`;
+
+  const mailService = new MailService();
+  try {
+    const success = await mailService.sendEmail({ to, subject, text, html });
+    if (success) {
+      return res.status(200).json({ message: "Email sent successfully" });
+    } else {
+      return res.status(500).json({ message: "Error sending email" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Error sending email", error });
+  }
+};
+
+export const sendPasswordUpdateConfirmationEmail = async (req: Request, res: Response): Promise<Response> => {
+  const validatedData = sendPasswordUpdateConfirmationEmailValidator.safeParse(req.body);
+
+  if (!validatedData.success) {
+    return res.status(400).json({
+      message: validatedData.error.message,
+      errors: z.treeifyError(validatedData.error),
+    });
+  }
+
+  const { to, username } = validatedData.data;
+  let html = fs.readFileSync(path.join(__dirname, "../", "static/password-update-confirmation.html"), "utf8");
+
+  html = html.replace("{{USERNAME}}", username);
+
+  const subject = "Password Updated Successfully!";
+  const text = `Your password has been updated successfully. Please click the button below to login: ${process.env.FRONTEND_URL}/login`;
 
   const mailService = new MailService();
   try {

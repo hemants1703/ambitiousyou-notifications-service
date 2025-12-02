@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "pnpm dlx tsx watch --env-file=.env src/server.ts"
+    "start": "pnpm dlx tsx watch --env-file=.env src/server.ts",
+    "dev": "pnpm dlx tsx watch --env-file=.env.development src/server.ts"
   },
   "keywords": [],
   "author": "",

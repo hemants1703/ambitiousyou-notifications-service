@@ -28,3 +28,8 @@ export const sendPasswordResetUpdateEmailValidator = z.object({
   to: z.email(),
   username: z.string().min(1),
 });
+
+export const sendPasswordUpdateConfirmationEmailValidator = z.object({
+  to: z.email(),
+  username: z.string().min(1),
+});

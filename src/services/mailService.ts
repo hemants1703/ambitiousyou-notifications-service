@@ -7,6 +7,7 @@ class MailService {
     this.transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST as string,
       port: Number(process.env.EMAIL_PORT),
+      secure: true, // Add this line - required for SSL/TLS
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,

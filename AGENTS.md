@@ -33,6 +33,6 @@ When user makes any changes in the application that are serious changes in the a
 0. pnpm - package manager
 1. Node.js - Server Side Runtime
 2. Express.js - Backend framework
-3. PostgreSQL (Drizzle) - Database access for scheduled notifications or custom notifications to users based on their details
+3. Azure Communication Service for sending emails (prod), Using Gmail for dev purposes
 
 We try to keep the tech stack as simple and lesser heavy as possible to keep the application super sleek, simple and performant
