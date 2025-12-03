@@ -11,14 +11,17 @@ app.use(express.json());
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static HTML files for development/preview
+app.use("/preview", express.static("src/static"));
+
 // Test route
 app.get("/health", (req, res) => {
   res.json({ status: "ok", message: "Server is running" });
 });
 
 // Routes
-app.use("/api/email", mailRoutes);                // Email Notifications Route Handlers
-app.use("/api/pwa", pwaPushNotificationRoutes);   // PWA Notifications Notifications Handler
+app.use("/api/email", mailRoutes); // Email Notifications Route Handlers
+app.use("/api/pwa", pwaPushNotificationRoutes); // PWA Notifications Notifications Handler
 
 // Start the server
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
