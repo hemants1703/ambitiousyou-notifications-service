@@ -4,4 +4,4 @@
 .env.production
 .env*.local
 !.env.example
-pnpm-lock.yaml
+# pnpm-lock.yaml
