@@ -8,4 +8,7 @@ RUN corepack enable pnpm && pnpm i --frozen-lockfile;
 
 COPY . .
 
+ENV PORT=8000
+EXPOSE 8000
+
 CMD ["pnpm", "start"]

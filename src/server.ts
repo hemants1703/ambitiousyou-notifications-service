@@ -3,7 +3,7 @@ import mailRoutes from "./routes/mailRoutes";
 import pwaPushNotificationRoutes from "./routes/pwaPushNotificationRoutes";
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());

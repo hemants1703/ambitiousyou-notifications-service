@@ -513,7 +513,7 @@ The main AmbitiousYou application communicates with this service via the `EmailS
 // In AmbitiousYou main app: src/services/emailService.ts
 export class EmailService {
   async sendEmailVerificationLink({ to, username, link }) {
-    await fetch(`${process.env.MAIL_SERVICE_BASE_URL}/send-email-verification`, {
+    await fetch(`${process.env.NOTIFICATIONS_SERVICE_BASE_URL}/api/email/send-email-verification`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ to, username, verificationLink: link }),
@@ -527,7 +527,7 @@ Configure the main app to point to this service:
 
 ```env
 # In AmbitiousYou main app .env
-MAIL_SERVICE_BASE_URL=http://localhost:3001/api/email
+NOTIFICATIONS_SERVICE_BASE_URL=http://localhost:3001
 ```
 
 ---
