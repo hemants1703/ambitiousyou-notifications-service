@@ -1,4 +1,5 @@
 import express from "express";
+import morgan from "morgan";
 import mailRoutes from "./routes/mailRoutes";
 import pwaPushNotificationRoutes from "./routes/pwaPushNotificationRoutes";
 
@@ -10,6 +11,8 @@ app.use(express.json());
 
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
+
+app.use(morgan("dev"));
 
 // Serve static HTML files for development/preview
 app.use("/preview", express.static("src/static"));
