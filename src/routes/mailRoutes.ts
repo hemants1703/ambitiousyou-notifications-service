@@ -12,6 +12,7 @@ const router = Router();
 
 router.post("/send", sendEmail);
 router.post("/send-welcome", sendWelcomeEmail);
+router.post("/send-email-verification", sendEmailVerificationEmail);
 
 // Password Reset
 router.post("/send-password-reset-link", sendPasswordResetLinkEmail);
@@ -20,5 +21,4 @@ router.post("/send-password-reset-confirmation", sendPasswordResetConfirmationEm
 // Password Update
 router.post("/send-password-update-confirmation", sendPasswordUpdateConfirmationEmail);
 
-router.post("/send-email-verification", sendEmailVerificationEmail);
 export default router;
