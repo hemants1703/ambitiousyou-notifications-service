@@ -4,7 +4,7 @@
 
 ### Microservice for Email & Push Notifications
 
-*A dedicated Express.js microservice handling all transactional email delivery for the AmbitiousYou ecosystem.*
+_A dedicated Express.js microservice handling all transactional email delivery for the AmbitiousYou ecosystem._
 
 [![Express.js](https://img.shields.io/badge/Express.js_5-000000?style=for-the-badge&logo=express)](https://expressjs.com/)
 [![Node.js](https://img.shields.io/badge/Node.js_22-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
@@ -21,10 +21,10 @@
 
 This microservice is a component of the **AmbitiousYou** goal-tracking platform. It handles all notification delivery, keeping the main application focused on business logic.
 
-| Repository | Description |
-|------------|-------------|
-| [**AmbitiousYou**](https://github.com/hemants1703/AmbitiousYou) | Main Next.js application (UI, Auth, Business Logic) |
-| **This Repo** | Notifications microservice (Email, Future: PWA Push) |
+| Repository                                                      | Description                                          |
+| --------------------------------------------------------------- | ---------------------------------------------------- |
+| [**AmbitiousYou**](https://github.com/hemants1703/AmbitiousYou) | Main Next.js application (UI, Auth, Business Logic)  |
+| **This Repo**                                                   | Notifications microservice (Email, Future: PWA Push) |
 
 ---
 
@@ -40,25 +40,25 @@ graph TB
 
     subgraph ThisService["📧 Notifications Service (This Repo)"]
         Express["Express.js 5<br/>Server"]
-        
+
         subgraph Routes["Routes Layer"]
             MailRoutes["/api/email/*"]
             PWARoutes["/api/pwa/*<br/>(Future)"]
         end
-        
+
         subgraph Controllers["Controllers"]
             MailController["Mail Controller"]
             PWAController["PWA Controller<br/>(Future)"]
         end
-        
+
         subgraph Validation["Validation"]
             ZodSchemas["Zod Schemas"]
         end
-        
+
         subgraph Services["Services"]
-            MailService["Mail Service<br/>(Nodemailer)"]
+            MailService["Mail Service<br/>(Microsoft Azure Email Communication Services)"]
         end
-        
+
         subgraph Templates["Templates"]
             HTMLTemplates["HTML Email<br/>Templates"]
         end
@@ -99,18 +99,18 @@ sequenceDiagram
 
     App->>Notif: POST /api/email/send-*
     Notif->>Zod: Validate request body
-    
+
     alt Invalid Request
         Zod-->>Notif: Validation errors
         Notif-->>App: 400 Bad Request
     end
-    
+
     Zod-->>Notif: Valid data
     Notif->>Template: Load HTML template
     Template-->>Notif: Template with placeholders
     Notif->>Notif: Replace {{VARIABLES}}
     Notif->>Mail: sendEmail(options)
-    Mail->>SMTP: Send via Nodemailer
+    Mail->>SMTP: Send via Microsoft Azure Email Communication Services
     SMTP-->>Mail: Message ID
     Mail-->>Notif: Success
     Notif-->>App: 200 OK
@@ -123,14 +123,14 @@ sequenceDiagram
 
 ### Current Capabilities
 
-| Feature | Description |
-|---------|-------------|
+| Feature                     | Description                                  |
+| --------------------------- | -------------------------------------------- |
 | 📧 **Transactional Emails** | Welcome, verification, password reset emails |
-| 🎨 **HTML Templates** | Beautiful, responsive email templates |
-| ✅ **Input Validation** | Zod schemas for all API requests |
-| 🔌 **REST API** | Clean, documented endpoints |
-| 🐳 **Docker Ready** | Containerized for easy deployment |
-| 🔄 **Hot Reload** | `tsx watch` for development |
+| 🎨 **HTML Templates**       | Beautiful, responsive email templates        |
+| ✅ **Input Validation**     | Zod schemas for all API requests             |
+| 🔌 **REST API**             | Clean, documented endpoints                  |
+| 🐳 **Docker Ready**         | Containerized for easy deployment            |
+| 🔄 **Hot Reload**           | `tsx watch` for development                  |
 
 ### Notification Types
 
@@ -181,26 +181,26 @@ graph LR
 graph TD
     subgraph Root["📂 ambitiousyou-notifications-service"]
         Server["server.ts<br/>(Entry Point)"]
-        
+
         subgraph Src["src/"]
             subgraph RoutesDir["routes/"]
                 MR["mailRoutes.ts"]
                 PR["pwaPushNotificationRoutes.ts"]
             end
-            
+
             subgraph ControllersDir["controllers/"]
                 MC["mailController.ts"]
                 PC["pwaController.ts"]
             end
-            
+
             subgraph ServicesDir["services/"]
                 MS["mailService.ts"]
             end
-            
+
             subgraph ValidatorsDir["validators/"]
                 MV["mailValidators.ts"]
             end
-            
+
             subgraph StaticDir["static/"]
                 SW["signup-welcome.html"]
                 VE["verify-email.html"]
@@ -209,7 +209,7 @@ graph TD
                 PWUC["password-update-confirmation.html"]
             end
         end
-        
+
         Dockerfile["Dockerfile"]
         Package["package.json"]
     end
@@ -265,6 +265,7 @@ GET /health
 ```
 
 **Response:**
+
 ```json
 {
   "status": "ok",
@@ -281,6 +282,7 @@ POST /api/email/send
 ```
 
 **Request Body:**
+
 ```json
 {
   "to": "user@example.com",
@@ -299,6 +301,7 @@ POST /api/email/send-welcome
 ```
 
 **Request Body:**
+
 ```json
 {
   "to": "user@example.com",
@@ -315,6 +318,7 @@ POST /api/email/send-email-verification
 ```
 
 **Request Body:**
+
 ```json
 {
   "to": "user@example.com",
@@ -332,6 +336,7 @@ POST /api/email/send-password-reset-link
 ```
 
 **Request Body:**
+
 ```json
 {
   "to": "user@example.com",
@@ -349,6 +354,7 @@ POST /api/email/send-password-reset-confirmation
 ```
 
 **Request Body:**
+
 ```json
 {
   "to": "user@example.com",
@@ -365,6 +371,7 @@ POST /api/email/send-password-update-confirmation
 ```
 
 **Request Body:**
+
 ```json
 {
   "to": "user@example.com",
@@ -391,15 +398,15 @@ All endpoints return validation errors in this format:
 
 ## 🛠️ Tech Stack
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **Node.js** | 22 | Runtime environment |
-| **Express.js** | 5.x | Web framework |
-| **TypeScript** | Latest | Type safety |
-| **Nodemailer** | 7.x | Email delivery |
-| **Zod** | 4.x | Request validation |
-| **tsx** | Latest | TypeScript execution & hot reload |
-| **pnpm** | 10.x | Package manager |
+| Technology                                       | Version | Purpose                           |
+| ------------------------------------------------ | ------- | --------------------------------- |
+| **Node.js**                                      | 22      | Runtime environment               |
+| **Express.js**                                   | 5.x     | Web framework                     |
+| **TypeScript**                                   | Latest  | Type safety                       |
+| **Microsoft Azure Email Communication Services** | -       | Email delivery                    |
+| **Zod**                                          | 4.x     | Request validation                |
+| **tsx**                                          | Latest  | TypeScript execution & hot reload |
+| **pnpm**                                         | 10.x    | Package manager                   |
 
 ---
 
@@ -472,7 +479,7 @@ docker run -d \
 ### Docker Compose (with Main App)
 
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
   notifications:
     build: ./ambitiousyou-notifications-service
@@ -497,6 +504,7 @@ http://localhost:3001/preview/
 ```
 
 Available templates:
+
 - `/preview/signup-welcome.html`
 - `/preview/verify-email.html`
 - `/preview/password-reset.html`
@@ -546,13 +554,13 @@ graph TB
     end
 ```
 
-| Benefit | Explanation |
-|---------|-------------|
+| Benefit                    | Explanation                                                    |
+| -------------------------- | -------------------------------------------------------------- |
 | **Separation of Concerns** | Main app focuses on business logic, this handles notifications |
-| **Independent Scaling** | Scale notification service separately during high email volume |
-| **Technology Flexibility** | Can swap email providers without touching main app |
-| **Future Extensibility** | Easy to add PWA push, SMS, or other notification channels |
-| **Simplified Testing** | Test email functionality in isolation |
+| **Independent Scaling**    | Scale notification service separately during high email volume |
+| **Technology Flexibility** | Can swap email providers without touching main app             |
+| **Future Extensibility**   | Easy to add PWA push, SMS, or other notification channels      |
+| **Simplified Testing**     | Test email functionality in isolation                          |
 
 ---
 
@@ -568,6 +576,6 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 Built with ❤️ by [Hemant Sharma](https://hemantsharma.tech)
 
-[LinkedIn](https://linkedin.com/in/hemants1703) · [Twitter](https://x.com/hemants1703) · [Portfolio](https://hemantsharma.tech)
+[LinkedIn](https://hemantsharma.tech/linkedin) · [Twitter](https://hemantsharma.tech/x) · [Portfolio](https://hemantsharma.tech)
 
 </div>
