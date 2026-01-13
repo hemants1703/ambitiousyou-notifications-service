@@ -28,7 +28,7 @@ This microservice is a component of the **AmbitiousYou** goal-tracking platform.
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```mermaid
 graph TB
