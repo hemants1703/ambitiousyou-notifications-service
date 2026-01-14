@@ -194,7 +194,7 @@ graph TD
             end
 
             subgraph ServicesDir["services/"]
-                MS["mailService.ts"]
+                MS["azureMailService.ts"]
             end
 
             subgraph ValidatorsDir["validators/"]

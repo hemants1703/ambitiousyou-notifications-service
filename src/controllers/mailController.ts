@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import fs from "fs";
 import path from "path";
-import MailService from "../services/mailService";
+import z from "zod";
+import AzureMailService from "../services/azureMailService";
 import {
   sendEmailValidator,
   sendEmailVerificationEmailValidator,
@@ -10,8 +11,6 @@ import {
   sendPasswordUpdateConfirmationEmailValidator,
   sendWelcomeEmailValidator,
 } from "../validators/mailValidators";
-import z from "zod";
-import AzureMailService from "../services/azureMailService";
 
 export const sendEmail = async (req: Request, res: Response): Promise<Response> => {
   const validatedData = sendEmailValidator.safeParse(req.body);

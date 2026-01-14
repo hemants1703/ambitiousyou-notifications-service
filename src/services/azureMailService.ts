@@ -41,7 +41,7 @@ export default class AzureMailService {
 
         if (timeElapsed > 18 * POLLER_WAIT_TIME) {
           throw new Error("Email send polling timed out");
-        } else {
+        } else if (poller.getResult()?.error) {
           throw poller.getResult()?.error;
         }
       }
@@ -81,7 +81,7 @@ export default class AzureMailService {
 
         if (timeElapsed > 18 * POLLER_WAIT_TIME) {
           throw new Error("Email send polling timed out");
-        } else {
+        } else if (poller.getResult()?.error) {
           throw poller.getResult()?.error;
         }
       }
